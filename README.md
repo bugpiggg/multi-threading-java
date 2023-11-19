@@ -21,4 +21,4 @@
     - Stack은 로컬변수들이 저장되고, 함수에 전달되는 메모리 영역/ IP는 수행할 다음 instruction 주소
 
 
-<details>
+</details>
