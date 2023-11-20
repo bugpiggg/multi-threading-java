@@ -47,7 +47,7 @@
 </details>
 
 <details>
-<summary>1 Introduction</summary>
+<summary>2 Threading fundamentals - Thread Creation</summary>
 
 ### Thread Creation 1
 
