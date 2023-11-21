@@ -60,4 +60,6 @@
 
 ### Thread Creation 2
 
+- Thread를 상속하는 클래스를 만들고, run() 함수를 구현하는 방식으로도 쓰레드를 생성할 수 있다.
+
 </details>
