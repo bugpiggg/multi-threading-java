@@ -1,7 +1,7 @@
 # multi-threading-java
 
 <details>
-<summary>### 1 Introduction</summary>
+<summary>1 Introduction</summary>
 
 Motiviation and OS fundamentals
 - Why we need Threads?
@@ -47,7 +47,7 @@ OS fundamentasl part2
 </details>
 
 <details>
-<summary>### 2 Threading fundamentals - Thread Creation</summary>
+<summary>2 Threading fundamentals - Thread Creation</summary>
 
 Thread Creation 1
 
