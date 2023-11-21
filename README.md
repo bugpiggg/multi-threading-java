@@ -1,9 +1,9 @@
 # multi-threading-java
 
 <details>
-<summary>1 Introduction</summary>
+<summary>### 1 Introduction</summary>
 
-### Motiviation and OS fundamentals
+Motiviation and OS fundamentals
 - Why we need Threads?
     - Responsiveness (특히 User Interface에서 더 치명적임) by concurrency = multitasking
     - Performance(짧은 시간안에 더 많은 작업 처리 가능) by parallelism
@@ -20,7 +20,7 @@
     - Stack은 로컬변수들이 저장되고, 함수에 전달되는 메모리 영역/ IP는 수행할 다음 instruction 주소
 
 
-### OS fundamentasl part2
+OS fundamentasl part2
 
 - What is context switch?
     - 프로세스는 다른 프로세스와 독립적으로 수행됨
@@ -47,9 +47,9 @@
 </details>
 
 <details>
-<summary>2 Threading fundamentals - Thread Creation</summary>
+<summary>### 2 Threading fundamentals - Thread Creation</summary>
 
-### Thread Creation 1
+Thread Creation 1
 
 - Thread.sleep() 함수는 OS로 하여금 현재 쓰레드를 스케줄하지 않도록 지정(loop를 돌거나 하는 것이 아님!!)
     - CPU 점유 안 함
@@ -58,7 +58,7 @@
 
 - thread.setUncaughtExceptionHandler()를 통해 예외처리 핸들러 등록가능
 
-### Thread Creation 2
+Thread Creation 2
 
 - Thread를 상속하는 클래스를 만들고, run() 함수를 구현하는 방식으로도 쓰레드를 생성할 수 있다.
 
