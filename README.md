@@ -63,3 +63,27 @@ Thread Creation 2
 - Thread를 상속하는 클래스를 만들고, run() 함수를 구현하는 방식으로도 쓰레드를 생성할 수 있다.
 
 </details>
+
+<details>
+<summary>3 Threading fundamentals - Thread Coordination</summary>
+
+Thread Termination & Daemon Threads 1
+
+<Thread termination>
+- 쓰레드는 리소스 점유함 -> 메모리와 커널 리소스. 만약 CPU를 쓰게 되면 CPU cycles과 cache memory 까지
+- 만약 쓰레드가 끝나면, 리소스 정리할 필요가 있음
+- 쓰레드가 이상하게 동작하면, 멈출 필요가 있음
+- **만약 수행중인 쓰레드가 존재하면 application은 멈추지 않음**
+
+<Interrupt 하는 방법>
+- interrupt signal을 손수처리하는 코드 추가
+- InterruptedException 던지는 method 실행
+
+<데몬 쓰레드>
+- 종료되도 상관없는 쓰레드. 애플리케이션동작에 영향을 주지 않기를 원할때
+- gracefully 하게 종료되지 않아도 되는 쓰레드
+
+
+Thread Termination & Daemon Threads 2
+
+</details>
