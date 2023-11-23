@@ -84,6 +84,16 @@ Thread Termination & Daemon Threads 1
 - gracefully 하게 종료되지 않아도 되는 쓰레드
 
 
-Thread Termination & Daemon Threads 2
+Joining Threads
+
+<Why do we need it?>
+- 다른 쓰레드는 독립적으로 동작함
+- 쓰레드의 수행은 out of control 임
+
+<How?>
+- 쓰레드가 loop를 돌면서 다른 쓰레드가 끝났는지 계속 체크한다 -> 비효율적임
+- 좋은 방법은 쓰레드가 go to sleep 하는거임
+    - 이를 위해 join을 쓰면 댐
+
 
 </details>
