@@ -97,3 +97,36 @@ Joining Threads
 
 
 </details>
+
+<details>
+<summary>4 Performance Optimization</summary>
+
+<Peformance in multithreading>
+- Latency - the time to completion of a task. Measured in time units.
+- Throughput - the amount of tasks completed in a given period. Measured in tasks/time unit.
+
+<Latency>
+1. 태스크가 single core 에서 T의 시간이 걸리는 작업일때
+2. 태스크를 N개로 쪼개어 subtask로 만들고, 병렬적으로 수행한다면
+3. T/N 으로 Latency를 줄일 수 있다
+
+<N?>
+- 그렇지만 일반적으로 N은 코어의 개수이다/ 만약 코어의 개수보다 많게 N을 설정하면 역효과가 남. 남은 하나의 쓰레드가 컨텍스트 스위칭을 유발하면서 캐시성능 저하, 추가적인 메모리 점유를 일으킬것임
+- 그리고 N = 코어의 개수 는 IO 블로킹과 같은 인터럽션이 없을때를 가정한것임. (다른 CPU를 점유하는 프로세스가 없어야 댐)
+- 또한 대부분의 컴퓨터는 HyperThreading을 지원함. 이는 물리적인 코어가 동시에 2개의 쓰레드를 동작할 수 있게 하는 기능. 
+
+<Inherent cost of Parallelization and Aggregation>
+고려해야 되는 코스트
+    - 태스크를 나누는 코스트
+    - 쓰레드 생성하고 쓰레드에게 태스크 할당하는 코스트
+    - 쓰레드 시작하고, 스케줄되는 시간
+    - 마지막 쓰레드가 끝나고 시그널을 보내는 시간
+    - aggregating 쓰레드가 동작하는 시간
+
+본 태스크의 수행시간이 짧은 경우에는 태스크를 분할 하는게 latency가 더 길 수 있다.
+
+<Can we break any task into subtasks?>
+- 아니다....
+- 독립적으로 수행되는 코드조각으로 이루어져 나눌 수 있는 태스크/순차적으로 실행되어야하기에 나눌 수 없는 태스크/ 위 2경우가 혼재되어 있는 태스크
+
+</details>
