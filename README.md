@@ -129,4 +129,28 @@ Joining Threads
 - 아니다....
 - 독립적으로 수행되는 코드조각으로 이루어져 나눌 수 있는 태스크/순차적으로 실행되어야하기에 나눌 수 없는 태스크/ 위 2경우가 혼재되어 있는 태스크
 
+<Optimizing for Throughput>
+- throughput은 정의한 시간내에 완료한 작업의 수이다. tasks/time unit
+- 방법 1. breaking tasks into subtasks
+    - latency = t/n
+    - throughput = n/t (기존 1/t 보다 성능개선)
+    - 그러나 실제적으로 < n/t 로 봐야댐. 추가적인 계산요소들이 있어서. (이전에 말했듯이 태스크 나누는 코스트, 쓰레드 생성 할당하는 코스트 등등..)
+- 방법 2. Running tasks in Parallel
+    - 각 태스크를 다른 쓰레드에 할당하는 것.
+    - throughput = n/t
+    - 이 경우에는 실제적으로 n/t와 유사할 것임
+
+<Thread pooling>
+- thread pool에 쓰레드 미리 생성해놓고 필요할 때 꺼내쓰는 기술
+
+<QUIZ>
+We are running an HTTP server on a single machine.
+Handling  of the HTTP requests is delegated to a fixed-size pool of threads.
+Each request is handled by a single thread from the pool by performing a blocking call to an external database which may take a variable duration, depending on many factors.
+After the response comes from the database, the server thread sends an HTTP response to the user.
+Assuming we have a 64 core machine.
+What would be the optimal thread pool size to serve the HTTP request?
+
+-> blocking call들은 CPU 리소스를 사용하지 않기에, 코어의 개수인 64개보다 더 많은 쓰레드를 할당하여 throughput을 최적화 할 수 있을것이다. 
+
 </details>
