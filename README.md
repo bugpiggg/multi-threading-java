@@ -3,7 +3,8 @@
 <details>
 <summary>1 Introduction</summary>
 
-Motiviation and OS fundamentals
+### Motiviation and OS fundamentals
+
 - Why we need Threads?
     - Responsiveness (특히 User Interface에서 더 치명적임) by concurrency = multitasking
     - Performance(짧은 시간안에 더 많은 작업 처리 가능) by parallelism
@@ -20,7 +21,7 @@ Motiviation and OS fundamentals
     - Stack은 로컬변수들이 저장되고, 함수에 전달되는 메모리 영역/ IP는 수행할 다음 instruction 주소
 
 
-OS fundamentasl part2
+### OS fundamentasl part2
 
 - What is context switch?
     - 프로세스는 다른 프로세스와 독립적으로 수행됨
@@ -49,7 +50,7 @@ OS fundamentasl part2
 <details>
 <summary>2 Threading fundamentals - Thread Creation</summary>
 
-Thread Creation 1
+### Thread Creation 1
 
 - Thread.sleep() 함수는 OS로 하여금 현재 쓰레드를 스케줄하지 않도록 지정(loop를 돌거나 하는 것이 아님!!)
     - CPU 점유 안 함
@@ -58,7 +59,7 @@ Thread Creation 1
 
 - thread.setUncaughtExceptionHandler()를 통해 예외처리 핸들러 등록가능
 
-Thread Creation 2
+### Thread Creation 2
 
 - Thread를 상속하는 클래스를 만들고, run() 함수를 구현하는 방식으로도 쓰레드를 생성할 수 있다.
 
@@ -67,30 +68,30 @@ Thread Creation 2
 <details>
 <summary>3 Threading fundamentals - Thread Coordination</summary>
 
-Thread Termination & Daemon Threads 1
+### Thread Termination & Daemon Threads 1
 
-<Thread termination>
+[Thread termination]
 - 쓰레드는 리소스 점유함 -> 메모리와 커널 리소스. 만약 CPU를 쓰게 되면 CPU cycles과 cache memory 까지
 - 만약 쓰레드가 끝나면, 리소스 정리할 필요가 있음
 - 쓰레드가 이상하게 동작하면, 멈출 필요가 있음
 - **만약 수행중인 쓰레드가 존재하면 application은 멈추지 않음**
 
-<Interrupt 하는 방법>
+[Interrupt 하는 방법]
 - interrupt signal을 손수처리하는 코드 추가
 - InterruptedException 던지는 method 실행
 
-<데몬 쓰레드>
+[데몬 쓰레드]
 - 종료되도 상관없는 쓰레드. 애플리케이션동작에 영향을 주지 않기를 원할때
 - gracefully 하게 종료되지 않아도 되는 쓰레드
 
 
-Joining Threads
+### Joining Threads
 
-<Why do we need it?>
+[Why do we need it?]
 - 다른 쓰레드는 독립적으로 동작함
 - 쓰레드의 수행은 out of control 임
 
-<How?>
+[How?]
 - 쓰레드가 loop를 돌면서 다른 쓰레드가 끝났는지 계속 체크한다 -> 비효율적임
 - 좋은 방법은 쓰레드가 go to sleep 하는거임
     - 이를 위해 join을 쓰면 댐
@@ -98,38 +99,39 @@ Joining Threads
 
 </details>
 
+
 <details>
 <summary>4 Performance Optimization</summary>
 
-<Peformance in multithreading>
+[Peformance in multithreading]
 - Latency - the time to completion of a task. Measured in time units.
 - Throughput - the amount of tasks completed in a given period. Measured in tasks/time unit.
 
-<Latency>
+[Latency]
 1. 태스크가 single core 에서 T의 시간이 걸리는 작업일때
 2. 태스크를 N개로 쪼개어 subtask로 만들고, 병렬적으로 수행한다면
 3. T/N 으로 Latency를 줄일 수 있다
 
-<N?>
+[N?]
 - 그렇지만 일반적으로 N은 코어의 개수이다/ 만약 코어의 개수보다 많게 N을 설정하면 역효과가 남. 남은 하나의 쓰레드가 컨텍스트 스위칭을 유발하면서 캐시성능 저하, 추가적인 메모리 점유를 일으킬것임
 - 그리고 N = 코어의 개수 는 IO 블로킹과 같은 인터럽션이 없을때를 가정한것임. (다른 CPU를 점유하는 프로세스가 없어야 댐)
 - 또한 대부분의 컴퓨터는 HyperThreading을 지원함. 이는 물리적인 코어가 동시에 2개의 쓰레드를 동작할 수 있게 하는 기능. 
 
-<Inherent cost of Parallelization and Aggregation>
-고려해야 되는 코스트
+[Inherent cost of Parallelization and Aggregation]
+- 고려해야 되는 코스트
     - 태스크를 나누는 코스트
     - 쓰레드 생성하고 쓰레드에게 태스크 할당하는 코스트
     - 쓰레드 시작하고, 스케줄되는 시간
     - 마지막 쓰레드가 끝나고 시그널을 보내는 시간
     - aggregating 쓰레드가 동작하는 시간
 
-본 태스크의 수행시간이 짧은 경우에는 태스크를 분할 하는게 latency가 더 길 수 있다.
+- 본 태스크의 수행시간이 짧은 경우에는 태스크를 분할 하는게 latency가 더 길 수 있다.
 
-<Can we break any task into subtasks?>
+[Can we break any task into subtasks?]
 - 아니다....
 - 독립적으로 수행되는 코드조각으로 이루어져 나눌 수 있는 태스크/순차적으로 실행되어야하기에 나눌 수 없는 태스크/ 위 2경우가 혼재되어 있는 태스크
 
-<Optimizing for Throughput>
+[Optimizing for Throughput]
 - throughput은 정의한 시간내에 완료한 작업의 수이다. tasks/time unit
 - 방법 1. breaking tasks into subtasks
     - latency = t/n
@@ -140,17 +142,60 @@ Joining Threads
     - throughput = n/t
     - 이 경우에는 실제적으로 n/t와 유사할 것임
 
-<Thread pooling>
+[Thread pooling]
 - thread pool에 쓰레드 미리 생성해놓고 필요할 때 꺼내쓰는 기술
 
-<QUIZ>
-We are running an HTTP server on a single machine.
-Handling  of the HTTP requests is delegated to a fixed-size pool of threads.
-Each request is handled by a single thread from the pool by performing a blocking call to an external database which may take a variable duration, depending on many factors.
-After the response comes from the database, the server thread sends an HTTP response to the user.
-Assuming we have a 64 core machine.
-What would be the optimal thread pool size to serve the HTTP request?
+[QUIZ]  
+We are running an HTTP server on a single machine.  
+Handling  of the HTTP requests is delegated to a fixed-size pool of threads.  
+Each request is handled by a single thread from the pool by performing a blocking call to an external database which may take a variable duration, depending on many factors.  
+After the response comes from the database, the server thread sends an HTTP response to the user.  
+Assuming we have a 64 core machine.  
+What would be the optimal thread pool size to serve the HTTP request?  
 
 -> blocking call들은 CPU 리소스를 사용하지 않기에, 코어의 개수인 64개보다 더 많은 쓰레드를 할당하여 throughput을 최적화 할 수 있을것이다. 
+
+</details>
+
+<details>
+<summary>5 Data sharing between Threads</summary>
+
+[Stack?]
+- 함수들이 호출되고, 인자들이 건네지고, 지역변수가 저장되는 메모리영역
+- stack + instruction pointer 는 각 쓰레드의 실행상태이다
+- 함수들이 호출될때마다 stack frame이 쌓인다
+
+[Stack Properties]
+- 쓰레드가 생성되면 할당됨
+- 스택의 크기는 플랫폼에 따라 고정되어 있음
+- 스택오버플로우 예외는 함수호출이 너무 많을때 발생할 수 있음
+
+[Heap]
+- Objects, member of classes, Static variables 들이 할당 될 수 있음
+- GC에 의해 관리됨. Object들은 참조하는 곳이 있는한 존재함
+- member of classes들은 부모 object들이 존재하는 한 같이 존재함
+- static variable은 영원히 존재함
+
+[object vs references]
+- references 는 stack에 할당될 수 있고, 클래스의 멤버라면 heap에 할당될 수 있음
+- object는 heap에만 할당될 수 있음
+
+[Stack vs Heap]
+![stack_vs_heap](img/stack_vs_heap.png)
+
+[Resources?]
+- variables
+- data structure
+- file or connection handles
+- message or work queue
+-> heap에 할당되는 모든 것들
+
+[Why we need Resource sharing]
+- work queue 가 존재하고, 다수의 스레드가 queue에서 task를 가져가는 구조일때
+- 다수의 http request thread가 db에 조작을 가하는 환경에서
+
+
+[Challenge of multithreaded programming]
+- resource를 조작하는 atomic 하지 않은 연산들을 여러 스레드가 수행하다 보면 기대하지 않는 결과를 얻을 수 있음 
 
 </details>
