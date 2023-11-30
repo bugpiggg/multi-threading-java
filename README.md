@@ -199,3 +199,56 @@ What would be the optimal thread pool size to serve the HTTP request?
 - resource를 조작하는 atomic 하지 않은 연산들을 여러 스레드가 수행하다 보면 기대하지 않는 결과를 얻을 수 있음 
 
 </details>
+
+<details>
+<summary>6 Concurrency Challenge</summary>
+
+[Critical Section]
+- 둘 이상의 쓰레드가 동시에 접근해서는 안되는 리소스에 접근하는 코드들을 말함
+
+[Synchronized - monitor/lock]
+- java의 synchronzied 문법을 사용하여 메소드 혹은 코드 영역에 하나의 쓰레드만 접근하도록 설정할 수 있다.
+- 메소드에 사용하게 되면 그 클래스가 가지는 모든 synchronzied 메소드에 하나의 쓰레드만 접근가능하다.
+- 코드영역에 사용하게 되면 lockingObject를 아규먼트로 넣어줘야 함
+- 위 기법을 모니터라함
+- 그리고 동기화 블록은 재진입이 가능함.
+
+[Atomic Operation?]
+- all reference assignments 
+- all assignment to primitive type except long and double
+    - long, double은 64비트라 보장할 수 없음 -> volatile 키워드를 붙이면 원자성이 보장됨
+
+[Race Condition]
+- 둘 이상의 스레드가 하나의 공유자원에 접근할때, 최소 하나의 스레드가 공유자원을 수정하려고 하는 상황임
+- 이때 스레드 스케줄링에 따라 부정확한 결과값을 도출할 수 있는 상황을 일컫는 말
+-> 이를 위한 해결방법은 critical section을 찾고 보호하는 것임 
+
+[Data race]
+- 컴파일러와 CPU는 인스트럭션수행순서를 성능 최적화를 위해 조절하는 경우가 있다.
+- 논리적인 정합성에 어긋나지 않는 방향으로 조절함
+- 아래 코드는 순서대로 실행될것임
+```
+public void someFunction() {
+    s = 1;
+    x = s + 2;
+    z = x + 4;
+}
+```
+- 하지만 아래 코드는 조정될 수 있음
+```
+public void increment() {
+    x++;
+    y++;
+}
+
+public void decrement() {
+    x--;
+    y--;
+}
+```
+- 그래서 이를 피하기 위해서는?
+    - Synchronized 키워드 사용하기 -> 하지만 race condition이 아닌 상황인데 쓰기 좋지 않음. 멀티쓰레드의 장점을 포기해야하기에 비효율적임
+    - 그래서 volatile을 쓰자  [volatile 설명하는 좋은 글](https://jenkov.com/tutorials/java-concurrency/volatile.html)
+
+
+</details>
