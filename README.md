@@ -251,4 +251,72 @@ public void decrement() {
     - 그래서 volatile을 쓰자  [volatile 설명하는 좋은 글](https://jenkov.com/tutorials/java-concurrency/volatile.html)
 
 
+[Locking]
+- Coarse-Grained  
+    - 모든 리소스에 하나의 락
+    - 구현이 간단하지만, 비효율적이다. 
+    - 하나의 리소스에 접근할때, 비록 다른 리소스에 대한 락이 잡혀있더라도 접근못함..
+- Fine-Grained
+    - 하나의 리소스에 하나의 락
+    - 더 병렬적으로 CPU 활용 가능... 그러나 DEAD LOCK 발생가능!!
+
+[Dead Lock]
+- 스레드1이 락1을 잡고 있고, 스레드2가 락2를 잡고 있을때, 각 스레드가 서로의 락을 원할때 데드락이 발생함
+
+[Dead Lock Condition]
+- Mutual Exclusion : 하나의 스레드만 리소스에 접근 가능함
+- Hold and Wait : 최소 하나의 스레드가 리소스를 가지고 있으며 다른 리소스를 기다리고 있음
+- Non-preemtive : 리소스는 스레드가 가지고 있을때 뺏을 수 없음
+- Circular Wait : 최소 2 스레드가 리소스를 가지면 다른 리소스를 기다리고 있음 
+
+[Solutions to Dead Lock]
+- Avoid circular wait
+    - 락을 얻는 과정의 순서를 고정한다!
+    - 좋은 방법이지만, 락이 많은 경우 적용하기 힘들 수 있음
+- watchdog를 이용해 deadLock 감지하기
+- thread Interruption(not possible in Synchronized)
+- try lock(not possible in Synchronized)
+
+</details>
+
+
+<details>
+<summary>7 Advanced Locking</summary>
+
+[ReentrantLock]
+- 객체에 적용된 Synchronized 키워드처럼 동작함
+- 명확한 락킹과 언락킹이 필요함
+
+```java
+
+public void method() {
+    lockObject.lock();
+    ...
+    lockObject.unlock();
+}
+```
+- 단점은 언락킹 하는것을 까먹는다면, 데드락의 원인이 됨
+    - 그래서 위 단점을 막기 위해 try-finally 구문에서 finally 블록에서 언락킹하는 패턴이 있음
+
+- 테스트를 위해 많은 함수들을 지원함
+    - getQueuedThread()
+    - getOwner()
+    - isHeldByCurrentThread()
+    - isLocked()
+- 락의 공정성을 보장하는 기능도 제공
+    - 하지만 이 기능은 throughput을 악화시킬 수 있음
+- lockInterruptibly() 기능
+    - 일반 lock() 의 경우에는 다른 스레드가 락을 점유하고 있는 경우, 스레드가 중단됨.
+    - 그래서 interrupt를 호출해도 소용없음
+    - 그러나 lockInterruptibly() 는 예외를 발생시킴
+    - 이 기능을 통해 정지된 스레드의 종료전에, 청소하기 용이함
+
+- tryLock() 기능
+    - 락 점유가능하다면, 참을 반환하고 락을 점유함
+    - 락 점유불가능하다면, 거짓을 반환하고 중단되지 않고 다음 명령어로 넘어감
+    
+
+
+
+
 </details>
