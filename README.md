@@ -316,6 +316,13 @@ public void method() {
     - 락 점유불가능하다면, 거짓을 반환하고 중단되지 않고 다음 명령어로 넘어감
     
 
+[ReentrantReadWriteLock]
+- Race Condition은 다수의 스레드가 자원을 공유하며, 최소 하나의 스레드가 리소스를 변경할때 발생함
+- 이의 해결방법은 Mutual Exclusion
+    - 그렇지만, 읽기만 하는 스레드들을 모두 Mutual Exclusion 하면 비효율적임
+- 그래서 읽기만 하는 작업이 많다면, ReadWriteLock을 사용하자
+    - readLock 은 읽기만 하는 스레드는 모두 획득 가능, writeLock이 점유중이면 획득 불가
+    - writeLock은 하나의 스레드만 획득 가능
 
 
 
