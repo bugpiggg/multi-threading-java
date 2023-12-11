@@ -327,3 +327,132 @@ public void method() {
 
 
 </details>
+
+<details>
+<summary>8 Inter Thread Communication </summary>
+
+
+[Semaphore]
+- can be used to restrict the number of users to a particular resources or a group of resources
+    - 이에 비해 락은 리소스당 하나의 유저로 제한함
+- 세마포어는 초기에 선언될 때, 허용할 개수를 아규먼트로 받으면 선언됨
+- 선언된 개수 만큼 각 스레드가 얻을 수 있으며, 한번에 하나 이상의 개수를 얻을 수 있음. release 할 때도 하나 이상의 개수를 release 할 수 있음
+
+
+[Binary Semaphore]
+- 이는 락과 유사함
+
+[Semaphore vs Lock]
+- semaphore는 소유자 스레드 라는 개념이 없음. 다수의 스레드가 얻을 수 있기 때문
+- 같은 스레드가 semaphore를 여러번 얻을 수 있음
+- semaphore는 어느 스레드든 release 할 수 있음
+
+
+[Producer vs Consumser]
+```java
+Semaphore full = new Semaphore(0);
+Semaphore empty = new Semaphore(1);
+Item item = null;
+
+void produce() {
+    while(true) {
+        emtpy.acquire();
+        item = produceNewItem();
+        full.release();
+    }    
+}
+
+void consume() {
+    while(true) {
+        full.acquire();
+        consume(item);
+        empty.release();
+    }
+}
+
+``` 
+
+
+[스레드간 통신]
+- Thread.interrupt()
+- thread.join()
+- Semaphore
+
+[Semaphore as Condition Variable]
+- acquire() 는 허용 개수가 0 초과인지 체크하는 것과 같음
+- 0 이하라면 스레드는 sleep
+- 다른 스레드가 release 하면, 스레드는 다시 한번 허용개수가 0 초과인지 체크하고, 조건에 부합한다면 다음 instruction 수행
+
+[Condition Variables]
+- condition variable은 항상 lock 과 관련이 있음
+- condition variable을 활용한 Producer Consumer 예제
+```java
+Lock lock = new ReentrantLock();
+Condition condition = lock.newCondition();
+String userName = null, password = null;
+
+void produce() {
+    lock.lock();
+    try {
+        while(userName == null || password = null) { // 4. 조건 확인하고, 나머지 진행 
+            condition.await(); // 1. 이때 unlock 하고, sleep
+        }
+    } finally {
+        lock.unlock();
+    }
+    doStuff();
+}
+
+void consume() {
+    lock.lock();
+    try {
+        userName = userTextBox.getText();
+        password = passwordTextBox.getText();
+        condition.signal(); // 2. produce 스레드 깨움
+    } finally {
+        lock.unlock(); // 3. unlock
+    }
+}
+
+
+```
+
+- void await() => unlock lock, wait until signalled
+- void signal() => wakes up a single thread, waiting on the condition variable
+    - 만약 기다리고 있는 condition variable이 없으면 아무것도 안함/ 세마포어와의 차이점
+- void signalAll() => 기다리고 있는 모든 스레드에게 신호를 보냄
+
+
+
+[Object as Condition Variable]
+- 모든 자바 클래스는 Object 클래스를 상속하므로, 어떤 객체라도 condition variable로 사용할 수 있음
+- wait() / notify() / notifyAll()
+
+```java
+
+public class MySharedClass {
+
+    private boolean isComplete = false;
+    public void waitUntilComplete() {
+        synchronized(this) {
+            while(isComplete == false) {
+                this.wait();
+            }
+        }
+    }
+    public void complete() {
+        synchronized(this) {
+            isComplete = true;
+            this.notify();
+        }
+    }
+
+}
+
+```
+
+
+
+
+
+</details>
