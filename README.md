@@ -451,8 +451,60 @@ public class MySharedClass {
 
 ```
 
+</details>
+
+<details>
+<summary>9 Lock Free Algorithm </summary>
+
+[Problem of Lock]
+- Dead Lock 
+    - 프로그램을 완전히 정지시킬 수 있음
+    - 락이 많아질 수록 dead lock의 발생 확률이 올라감
+- Slow Critical Section
+    - 다수의 스레드가 하나의 락을 사용하는 경우, 만약 하나의 스레드가 락을 오래 점유하면 다른 스레드들의 속도가 느려짐
+- Priority Inversion
+    - 낮은 우선순위를 가지는 스레드가 락을 점유하고 있는 상황에서, 스케줄 아웃됨 -> 높은 우선순위를 가지는 스레드가 락을 요청하는 상황이면, 스레드 진행이 안됨...
+- Thread not releasing a lock
+    - 스레드가 락을 release 하지 않고 죽어버린 상황...
+    - 복구 불가능한 상황임
+- Performance
+    - 락을 요청하고, 점유하는 오버헤드
+    - 대부분의 경우에는 인지하지 못할 정도로 작은 연산이지만, 실시간 응답이 중요한 프로그램의 경우에는 중대할 수 있다
+
+[Lock Free Techniques]
+- 락이 필요한 이유는?
+    - 다수의 스레드가 공유자원에 접근하는 경우
+    - 최소 하나의 스레드가 자원을 수정하려고 함
+    - non atomic operation
+- atomic operation 조건을 만족하면 된다!!
+    - 단일 하드웨어 명렁어를 만족하게 하자
+- atomic operation
+    - read, assignment on all primitive types (except long, double)
+    - read, assignment on all references
+    - volatile long and double
+    - AtomicX Classes...
+
+[Atomic Integer]
+```java
+int initialValue = 0;
+AtomicInteger atomicInteger = new AtomicInteger(initialValue);
+
+atomicInteger.addAndGet(5);
+atomiceInteger.getAndAdd(5);
+
+```
+
+- 장점은 단순함/락 불필요/ race condition or data race 없음
+- 단점은 위 operation 자체만 atomic 함
+
+- 결론은 동시성문제에서 좋은 해결책이지만, 필요한 경우에만 사용해야함. 싱글스레드 환경에서는 비효율적임!
 
 
-
+[AtomicReference]
+- compareAndSet(expectedValue, newValue)
+    - 현재 값과 expectedValue가 같다면 newValue로 업데이트, 아니라면 무시됨
+    - 하나의 하드웨어 오퍼레이션으로 컴파일 됨
+    - 많은 atomic operation이 위의 연산을 내부적으로 활용함
+    
 
 </details>
