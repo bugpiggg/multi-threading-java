@@ -508,3 +508,42 @@ atomiceInteger.getAndAdd(5);
     
 
 </details>
+
+<details?>
+<summary>10 Threading models for High Performance IO</summary>
+
+[블로킹 작업]
+- 락을 활용하는 경우, critical section에 하나의 스레드만 접근할 수 있기에, 다른 스레드는 블로킹 된다.
+    - 이는 performance 측면에서 큰 단점임
+- 이런 단점으로 인해, 위에서 lock-free algorithm등을 살펴봤음
+- 이번에는 블로킹 작업의 일종인 blocking IO를 알아볼것임
+
+[IO?]
+- CPU는 메모리에 언제든지 직접 접근이 가능하기에, OS의 개입없이 메모리에 데이터를 읽고 쓸 수 있음
+- 그렇지만 모니터, 키보드, hdd, network card 등에는 직접 접근이 불가능함
+    - 위의 장치 작동이 완료되고 준비가 되기 전까지 CPU 할 일 없음. 다른 작업 수행 가능
+    - 준비 완료되면 interrupt가 발생함
+    - 장치 데이터를 CPU가 읽어들이거나 쓰는데 OS나 드라이버가 활용됨
+- DMS? 위의 장치들이 바로 메모리에 쓰거나 읽는 권한
+
+[Thread pooling]
+- 스레드 풀을 유지함으로서, 스레드를 생성하고 시작하고 종료하는 오버헤드를 줄일 수 있음
+    - 그렇지만 블로킹호출을 컨텍스트 내에 포함하지 않아야함..
+    - 예를 들어, 싱글코어이고, 스레드 풀의 스레드 개수가 1개인 상황에서, IO bound Application이라면, 대부분의 시간에 CPU가 idle 임
+    - 새로 들어오는 요청은 network card queue에 쌓임
+
+[Multithreaded example]
+- 멀티 스레드 환경에서도 IO bound application은 문제가 됨
+- 스레드 수가 고정되어 있는 상황에서, IO가 긴 작업을 스레드가 시작하게 되면, 호출가능한 스레드 수가 줄어들게 되어, 전체적이 성능에 영향을 줌...
+
+[Observation]
+- 블로킹 호출을 포함하는 경우, 스레드 수 = 코어수 인 상황에서
+    - 최고의 성능과 CPU 활용을 보여주지 않는다..
+- 소수의 블로킹 호출을 포함하더라도, 전체적인 성능에 영향을 준다...
+
+
+[Thread Per Task Model]
+- 요청마다 스레드를 생성함
+- 문제점 => 스레드는 비싼 자원이다.../스레드는 스택 메모리와 다른 자원을 점유함/문맥교환으로 인한 성능 저하(Threadshing)
+
+</details>
