@@ -509,7 +509,7 @@ atomiceInteger.getAndAdd(5);
 
 </details>
 
-<details?>
+<details>
 <summary>10 Threading models for High Performance IO</summary>
 
 [블로킹 작업]
@@ -545,5 +545,58 @@ atomiceInteger.getAndAdd(5);
 [Thread Per Task Model]
 - 요청마다 스레드를 생성함
 - 문제점 => 스레드는 비싼 자원이다.../스레드는 스택 메모리와 다른 자원을 점유함/문맥교환으로 인한 성능 저하(Threadshing)
+- 또 다른 문제점 => 제어의 역전(inversion of control) / 외부 자원에서 스레드를 오래 잡고 있다보면 성능이 외부 요인에 의해 제한됨
+
+
+[Non blocking IO]
+- 스레드 block 하지않고 바로 반환함
+- 콜백함수 활용
+- 이를 활용하면, 스레드 계속 생성하지 않기에 context switch 가 없다
+- 외부기기나 어플리케이션의 영향을 받지 않음
+
+[Summary]
+- thread per core + non blocking IO 가 최적의 성능을 보여줌
+- 그렇지만 단점으로 가독성이 안 좋음 / 어려운 API.. 
+
+
+[comparison]
+- blocking io + thread per task vs non blocking io + thread per core
+    - performance : high memory, context switch / optimal
+    - safety, stability : inversion of control / no issues
+    - code writing, reading, testing, debugging : easy / hard
+
+
+</details>
+
+<details>
+<summary>11 virtual thread</summary>
+
+[Java thread vs Os thread]
+- 우리가 Java 스레드를 생성하고, start 하면 실제 OS thread 가 생성된다.
+- 그리고 이를 OS가 스케줄링한다
+- 이를 platform thread라 함
+    - 이는 비용이 크고 무거움 / 제한된 자원이며 JVM stack 에 묶여 있음
+
+[virtual thread]
+- JDK 21에 처음 도입
+- 이 virtual thread는 완전히 JVM에 속하며, JVM에 의해 관리됨
+- stack도 할당 되지 않음
+- 다른 자바 객체처럼 heap에 할당되며 관리됨 by GC
+- 실제 수행 방식
+    - virtual thread가 생성되자마자, JVM은 가벼운 platform thread pool을 만듬
+    - 그리고 virtual thread가 실행되려하면, platform thread 하나에 mount 됨
+    - 이를 carrier thread라고 함
+    - 만약 virtual thread가 실행되다가 진행될 수 없는 상태가 되면, 현재 stack과 instruction pointer 등을 다시 heap에 저장하고 unmount 하여 다른 virtual thread가 실행될 수 있게 한다
+
+
+[performance/throughput gain]
+- 만약 CPU 연산마 하는 스레드라면 성능개선은 없다
+- 그러나 blocking operation이 수행되는 스레드라면 유용함
+- 그래서 정리하면, virtual thread를 통해 'blocking IO + thread per task' 와 'non blockin io + thread per core'의 장점만 취할 수 있음
+
+
+[practices]
+- virtual thread는 항상 daemon thread로 설정됨
+- 기본 priority를 가짐
 
 </details>
