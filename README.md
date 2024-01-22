@@ -1,5 +1,9 @@
 # multi-threading-java
 
+This repo is based on "Java Multithreading, Concurrency & Performance Optimization" by Michael Pogrebinsky in Udemy.
+
+- period : 2023.11.20 ~ 2023.12.16
+
 <details>
 <summary>1 Introduction</summary>
 
